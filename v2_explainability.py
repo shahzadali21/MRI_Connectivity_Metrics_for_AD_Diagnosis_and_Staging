@@ -18,9 +18,9 @@ import argparse
 import logging
 import pandas as pd
 from utils import load_model, load_data
-import v1_2_visualization as viz
-import v1_2_XAI as xai
-from models import select_top_models
+import v2_visualization as viz
+import v2_XAI as xai
+from V2_models import select_top_models
 
 import warnings
 warnings.filterwarnings('ignore')

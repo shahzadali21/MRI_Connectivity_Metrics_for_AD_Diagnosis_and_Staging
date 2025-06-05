@@ -1,8 +1,8 @@
 # Copyright: Shahzad Ali
 # Author: Shahzad Ali
 # e-mail: shahzad.ali6@unibo.it
-# Created: 2024-10-24
-# Last modified: 2024-11-07
+# Created: 2025-01-24
+# Last modified: 2024-12-07
 # Version: 1.2
 
 """
@@ -264,29 +264,6 @@ def main():
 
     # Load preprocessed data file
     preprocessed_file = os.path.join(args.output_dir, '1_ADNI_generalPreprocessed.csv')
-
-    #Feature sets dictionary for naming and processing   
-    # feature_combinations = {
-    #     #'Demographic': demographic_features,
-    #     #'Clinical': clinical_features,
-    #     'Morphometric': morphometric_features,
-    #     'Microstructural': microstructural_features,
-    #     'GT_Local': GT_local_metrics,
-    #     'GT_Global': GT_global_metrics,
-    #     'GT': GT_local_metrics + GT_global_metrics,
-    #     'Microstructural_Morphometric': microstructural_features + morphometric_features,
-    #     'Morphometric_GT': morphometric_features + GT_global_metrics + GT_local_metrics,
-    #     'Microstructural_GT': microstructural_features + GT_global_metrics + GT_local_metrics,
-    #     'Microstructural_Morphometric_GT': microstructural_features + morphometric_features + GT_global_metrics + GT_local_metrics,
-    #     #'Demographic_Microstructural_GT': demographic_features + microstructural_features + GT_global_metrics + GT_local_metrics,
-    #     'Demographic_Microstructural_Morphometric_GT': demographic_features + microstructural_features + morphometric_features + GT_global_metrics + GT_local_metrics,
-    #     #'GT_Microstructural_Morphometric_Age': demographic_features['Age'] + microstructural_features + morphometric_features + GT_global_metrics + GT_local_metrics,
-    #     #'GT_Microstructural_Morphometric_Sex': demographic_features['Sex_le'] + microstructural_features + morphometric_features + GT_global_metrics + GT_local_metrics,
-    #     #'GT_Microstructural_Morphometric_Marry': demographic_features['PTMARRY_le'] + microstructural_features + morphometric_features + GT_global_metrics + GT_local_metrics,
-    #     #'GT_Microstructural_Morphometric_Edu': demographic_features['PTEDUCAT'] + microstructural_features + morphometric_features + GT_global_metrics + GT_local_metrics,
-    #     #'GT_Microstructural_Morphometric_Age_Sex': demographic_features['Age', 'Sex_le'] + microstructural_features + morphometric_features + GT_global_metrics + GT_local_metrics,
-    #     }
-    
 
     feature_combinations = {
         #'Demographic': demographic_features + csf_feature,

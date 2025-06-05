@@ -19,7 +19,7 @@ import pandas as pd
 from sklearn.ensemble import VotingClassifier
 
 from utils import load_data, save_results, save_model, save_metrics_to_excel
-from models import evaluate_models
+from V2_models import evaluate_models
 
 import warnings
 # Suppress all warnings

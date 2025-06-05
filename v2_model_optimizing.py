@@ -17,7 +17,7 @@ import logging
 import argparse
 
 from utils import load_data, save_model, load_model, save_results, save_metrics_to_excel
-from models import get_models_and_params, optimize_models, evaluate_models
+from V2_models import get_models_and_params, optimize_models, evaluate_models
 
 
 import warnings
