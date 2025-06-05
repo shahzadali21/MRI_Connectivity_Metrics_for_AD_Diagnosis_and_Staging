@@ -1,4 +1,10 @@
 
+# Copyright: Shahzad Ali
+# Author: Shahzad Ali
+# e-mail: shahzad.ali6@unibo.it
+# Created: 2025-03-21
+# Last modified: 2025-04-14
+
 
 ########## OLD ###########
 def plot_shap_summary_by_class(model, X_test, class_mapping, output_dir):

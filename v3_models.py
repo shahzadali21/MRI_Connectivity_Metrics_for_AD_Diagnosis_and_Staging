@@ -1,5 +1,12 @@
 # regression_models.py
 
+# Copyright: Shahzad Ali
+# Author: Shahzad Ali
+# e-mail: shahzad.ali6@unibo.it
+# Created: 2025-03-21
+# Last modified: 2025-04-14
+
+
 import numpy as np
 import pandas as pd
 import logging

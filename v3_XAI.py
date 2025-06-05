@@ -1,3 +1,8 @@
+# Copyright: Shahzad Ali
+# Author: Shahzad Ali
+# e-mail: shahzad.ali6@unibo.it
+# Created: 2025-03-21
+# Last modified: 2025-04-14
 
 import os
 import numpy as np

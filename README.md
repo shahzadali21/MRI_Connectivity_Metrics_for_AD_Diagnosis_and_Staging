@@ -21,23 +21,6 @@ Upon execution, the project will create and organize the following directory str
 - **results/**: Contains evaluation metrics and predictions.
 - **plots/**: Stores generated comparison plots and confusion matrices.
 
-ProjectOutput_<Feature_Combination>/
-├── CN_vs_AD/               # Classification comparison folder (e.g., CN vs AD)
-│   ├── data/               # Folder to store training and test datasets (X_train, X_test, y_train, y_test)
-│   ├── models/             # Folder to save trained models
-│   ├── plots/              # Folder to save generated plots
-│   └── results/            # Folder to save final results
-├── CN_vs_MCI/              # Another comparison (e.g., CN vs MCI)
-│   ├── data/
-│   ├── models/
-│   ├── plots/
-│   └── results/
-└── CN_MCI_AD/              # Three-level classification folder
-    ├── data/
-    ├── models/
-    ├── plots/
-    └── results/
-
 
 ## How to Run the Project
 ### Clone the repository
