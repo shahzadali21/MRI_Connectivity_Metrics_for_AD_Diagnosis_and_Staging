@@ -42,7 +42,7 @@ ProjectOutput_<Feature_Combination>/
 ## How to Run the Project
 ### Clone the repository
 ```
-git clone <https://github.com/shahzadali21/AD_ML_pipeline.git>
+git clone <https://github.com/shahzadali21/MRI_Connectivity_Metrics_for_AD_Diagnosis_and_Staging.git>
 cd <repository-directory>
 ```
 ### Install dependencies
