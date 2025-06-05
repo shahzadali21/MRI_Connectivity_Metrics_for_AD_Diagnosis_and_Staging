@@ -1,16 +1,16 @@
-# Alzheimer's Disease (AD) Classification - Machine Learning Pipeline
+# A Systematic Study on the Integration of Advanced MRI Connectivity Metrics for Alzheimer’s Disease Diagnosis and Staging and Longitudinal Cognitive Decline Prediction
 
 ## Project Overview
-This project implements a machine learning pipeline for the classification of Alzheimer's Disease (AD) into different diagnostic categories: Cognitively Normal (CN), Mild Cognitive Impairment (MCI), and Dementia. The pipeline supports both binary classification (CN vs. Dementia) and three-level classification (CN vs. MCI vs. Dementia) using various machine learning models. It includes preprocessing of multimodal data (clinical, TCK metrics, and graph theory metrics), model training, optimization, voting, explainability, and final model comparison.
+This project implements a machine learning pipeline for the Alzheimer's Disease Stage classification (DSC) and Longitudinal Cognitive Decline Prediction (LCDP) in terms of delta MMSE. The pipeline supports both binary classification (CN-ADD, CN-MCI, MCI-ADD) and three-level classification (CN-MCI-ADD) using various machine learning models. It includes preprocessing of multimodal data (demographic, Morphometric (MO), Miscrostructial (MO), and Graph Theory (GT) features), model training, optimization, Ensemble Learning, eXplainability (XAI).
 
 
 
 
 ## Project Structure
 - **preprocessing.py**: Handles the preprocessing of clinical data, including feature scaling and train-test splitting.
+- **model_optimization.py**: Selects top-performing models and optimizes their hyperparameters via five-fold CV using GridSearchCV.
 - **model_training.py**: Trains various machine learning models and evaluates their performance on the test set.
-- **model_optimization.py**: Selects top-performing models and optimizes their hyperparameters using GridSearchCV.
-- **voting.py**: Implements voting classifiers using the top-performing models from both the initial and optimized models.
+- **voting.py**: Implements ensemble classifier using the top-performing models from both the optimized models.
 - **final_comparison.py**: Compares the performance of all models (initial, optimized, and voting classifiers) and generates visualizations.
 - **main.py**: Orchestrates the entire pipeline, running all steps in sequence.
 
