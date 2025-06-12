@@ -38,33 +38,20 @@ pip install -r requirements.txt
 ## Running the Project
 ### Option 1: Running the Project Step-by-Step
 #### Step 1: Data Preprocessing
-##### For Clinical Data:
 ```
-python preprocessing.py 
-```
-##### For Multimodal Data (Clinical + Graph Theory Metrics + TCK Metrics)
-```
-python preprocessing_multimod.py 
+python preprocessing.py
 ```
 #### Step 2: Model Training
 ```
-python model_training.py 
+python model_optimizing.py 
 ```
 #### Step 3: Final Model Comparison
 ```
-python final_comparison.py
+python ensemble.py
 ```
 #### Step 4: Model Optimization
 ```
-python model_optimization.py 
-```
-#### Step 5: Voting Classifiers
-```
-python voting.py 
-```
-#### Step Final Comparison:
-```
-python final_comparison.py 
+python explainability.py 
 ```
 
 ## Option 2: Full Pipeline Execution

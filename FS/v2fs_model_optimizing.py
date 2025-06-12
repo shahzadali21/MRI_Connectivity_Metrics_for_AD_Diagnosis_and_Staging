@@ -1,8 +1,8 @@
 # Copyright: Shahzad Ali
 # Author: Shahzad Ali
 # e-mail: shahzad.ali6@unibo.it
-# Created: 2025-1-24
-# Last modified: 2025-03-07
+# Created: 2024-10-24
+# Last modified: 2024-11-12
 
 """
 This script handles the training, optimization, and ensemble of machine learning models.
@@ -15,10 +15,12 @@ calculates diversity using the Q metric, and performs ensemble voting with diver
 import os
 import logging
 import argparse
+import pandas as pd
 
 from utils import load_data, save_model, load_model, save_results, save_metrics_to_excel
-from V2_models import get_models_and_params, optimize_models, evaluate_models
+from models import get_models_and_params, optimize_models, evaluate_models
 
+from v2fs_feature_selection import feature_selection  # Import your feature_selection function
 
 import warnings
 # Suppress all warnings
@@ -40,13 +42,23 @@ def create_directory_structure(output_dir, feature_combination_name, classificat
     return classification_dir
 
 
-def train_and_evaluate_models(data_dir, models_dir, results_dir, classification_type, comparison, metrics_dict):
+def train_and_evaluate_models(data_dir, models_dir, results_dir, classification_type, comparison, metrics_dict, feature_selection_method="none", k=None):
     logging.info("Loading preprocessed data")
     X_train = load_data(os.path.join(data_dir, 'X_train.csv'))
     X_test = load_data(os.path.join(data_dir, 'X_test.csv'))
     y_train = load_data(os.path.join(data_dir, 'y_train.csv')).values.ravel()
     y_test = load_data(os.path.join(data_dir, 'y_test.csv')).values.ravel()
 
+    # Step 1: Feature Selection
+    if feature_selection_method != "none":
+        logging.info(f"Applying feature selection: {feature_selection_method}")
+        X_train_selected, selected_features = feature_selection(X_train, y_train, method=feature_selection_method, k=k)
+        X_test_selected = X_test.iloc[:, selected_features]  # Select the same features from the test set
+    else:
+        logging.info("No feature selection applied.")
+        X_train_selected = X_train
+        X_test_selected = X_test
+        
     # Step 1: Get initial models and parameters
     logging.info("Getting models from 'models.py'")
     models_with_params = get_models_and_params(seed=42)
@@ -61,12 +73,12 @@ def train_and_evaluate_models(data_dir, models_dir, results_dir, classification_
             optimized_models[name] = load_model(name, models_dir)  # Pass model name and directory
         else:
             logging.info(f"Training and Optimizing model: {name}")
-            optimized_models[name] = optimize_models({name: models_with_params[name]}, X_train, y_train)[name]
+            optimized_models[name] = optimize_models({name: models_with_params[name]}, X_train_selected, y_train)[name]
             save_model(optimized_models[name], name, models_dir)  # Ensure models are saved as .joblib
 
     # Step 2: Optimize models
     #logging.info(f"Training and Optimizing models")
-    #optimized_models = optimize_models(models_with_params, X_train, y_train)
+    #optimized_models = optimize_models(models_with_params, X_train_selected, y_train)
 
     #logging.info("Saving trained and Optimized models")
     #for name, model in optimized_models.items():
@@ -74,7 +86,7 @@ def train_and_evaluate_models(data_dir, models_dir, results_dir, classification_
 
     # Step 3: Evaluate models
     logging.info("Evaluating models and getting predictions")
-    metrics, predictions = evaluate_models(optimized_models, X_test, y_test)
+    metrics, predictions = evaluate_models(optimized_models, X_test_selected, y_test)
 
     logging.info("Saving metrics for all models")
     metrics_dict[f"{classification_type}_{comparison}"] = metrics
@@ -87,8 +99,9 @@ def train_and_evaluate_models(data_dir, models_dir, results_dir, classification_
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="Train and evaluate models for all classification types")
-    parser.add_argument('--output_dir', type=str, default='V6_ProjectOutput_AmyStatus', help="Main project directory for clinical AD dataset")
-    #parser.add_argument('--feature_combination_name', type=str, required=True, help="Name of the feature combination being processed")
+    parser.add_argument('--output_dir', type=str, default='V2fs_ProjectOutput', help="Main project directory for clinical AD dataset")
+    parser.add_argument('--feature_selection_method', type=str, default='mutual_info', choices=["none", "mutual_info", "anova", "rfe_elastic_net", "random_forest", "pca", "ga"], help="Feature selection method (e.g., none, mutual_info, anova, rfe_elastic_net, pca, ga)")
+    parser.add_argument('--k', type=int, default=10, help="Number of features to select (if applicable)")
     return parser.parse_args()
 
 def main():
@@ -97,30 +110,8 @@ def main():
 
     # Dictionary to hold metrics for each classification type
     metrics_dict = {}
-
-    # Loop over all feature combination folders
-    #feature_combination_folders = [folder for folder in os.listdir(args.output_dir) if os.path.isdir(os.path.join(args.output_dir, folder))]
-    # OR 
     # Loop over specified feature combination folders
-    feature_combinations = [
-                            #'Clinical',
-                            'Morphometric',
-                            'Microstructural',
-                            'GT_Local',
-                            'GT_Global',
-                            'GT',
-                            'Microstructural_Morphometric',
-                            'Morphometric_GT',
-                            'Microstructural_GT',
-                            'Microstructural_Morphometric_GT',
-                            #'Demographic_Microstructural_GT',
-                            # 'Demographic_Microstructural_Morphometric_GT',
-                            #'GT_Microstructural_Morphometric_Age',
-                            #'GT_Microstructural_Morphometric_Sex',
-                            #'GT_Microstructural_Morphometric_Edu',
-                            #'GT_Microstructural_Morphometric_Age_Sex',
-                            ]
-    
+    feature_combinations = ["Demographic_Microstructural_Morphometric_GT"]
     # Define classification types and comparisons
     CLASSIFICATION_COMPARISONS = {
         'binary': ['CN_vs_AD', 'CN_vs_MCI', 'MCI_vs_AD'],
