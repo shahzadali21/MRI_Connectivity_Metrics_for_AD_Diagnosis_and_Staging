@@ -19,8 +19,8 @@ import argparse
 import pandas as pd
 from sklearn.ensemble import VotingRegressor
 
-from utils import load_data, save_results, save_model, save_regression_metrics, save_metrics_to_excel
 from LCDP_models import evaluate_models
+from utils import load_data, save_results, save_model, save_metrics_to_excel
 
 import warnings
 warnings.filterwarnings("ignore")
@@ -109,32 +109,6 @@ def ensemble_regression(output_dir, results_dir, feature_combination_name, subse
         else:
             logging.warning(f"Model file {model_name}.joblib not found. Skipping this model.")
 
-    # # Step 4: Select models based on the "ABOVE MEAN R²" method
-    # #mean_r2 = metrics_df['R2'].mean()
-    # #logging.info(f"Mean model R²: {mean_r2}")
-    # #selected_model_names = [model for model in metrics_df[metrics_df['R2'] > mean_r2].index]
-    # #logging.info(f"Selected models with R² above mean: {selected_model_names}")
-
-    # # Step 4: Select models based on the "BELOW MEAN 'MAE' | 'MSE' | 'RMSE'" method
-    # #mean_mae = metrics_df['MAE'].mean()
-    # #logging.info(f"Mean model MAE: {mean_mae}")    
-    # #selected_model_names = [model for model in metrics_df[metrics_df['MAE'] < mean_mae].index]   #'MAE' | 'MSE' | 'RMSE'
-    # #logging.info(f"Selected models with MAE above mean: {selected_model_names}")
-
-    # # Step 4: Select models based on the "BELOW MEAN 'MAE' | 'MSE' | 'RMSE'" method
-    # mean_mae = metrics_df['MAE'].mean()
-    # logging.info(f"Mean model MAE: {mean_mae}")
-    
-    # # Sort models by MAE (ascending order) and Select the TOP 3 or 5 Models with the lowest MAE
-    # sorted_models = metrics_df.sort_values(by='MAE').index
-    # top_n = 3
-    # selected_model_names = sorted_models[:top_n]
-    # logging.info(f"Selected top {top_n} models with the lowest MAE: {selected_model_names}")
-
-    # if selected_model_names.empty:
-    #     logging.error("No models were selected for the ensemble. Skipping.")
-    #     return
-
 
     # Step 4: Select models based on the "below_mean" or "top_n" method; 
     # Define the metric to use ('MAE', 'MSE', or 'RMSE')
@@ -195,7 +169,7 @@ def ensemble_regression(output_dir, results_dir, feature_combination_name, subse
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="Create an ensemble using Voting Regressor for all subsets")
-    parser.add_argument('--output_dir', type=str, default='V7_ProjectOutput_wAmyStatus_Ens_belowMean', help="Main project directory for clinical AD dataset")
+    parser.add_argument('--output_dir', type=str, default='Results/LCDP', help="Main project directory for clinical AD dataset")
     return parser.parse_args()
 
 
@@ -209,21 +183,20 @@ def main():
     # Loop over specified feature combination folders
     feature_combinations = [
                             #'Clinical',
-                            'Morphometric',
-                            'Microstructural',
-                            'GT_Local',
-                            'GT_Global',
-                            'GT',
-                            'Microstructural_Morphometric',
-                            'Morphometric_GT',
-                            'Microstructural_GT',
-                            'Microstructural_Morphometric_GT',
-                            #'Demographic_Microstructural_GT',
-                            # 'Demographic_Microstructural_Morphometric_GT',
-                            #'GT_Microstructural_Morphometric_Age',
-                            #'GT_Microstructural_Morphometric_Sex',
-                            #'GT_Microstructural_Morphometric_Edu',
-                            #'GT_Microstructural_Morphometric_Age_Sex',
+                            'MO',
+                            # 'MS',
+                            # 'GT_Local',
+                            # 'GT_Global',
+                            # 'GT',
+                            # 'MO_MS',
+                            # 'MO_GT',
+                            # 'MS_GT',
+                            # 'MO_MS_GT',
+                            # 'MO_MS_GT_Dg',
+                            # 'MO_MS_GT_Age',
+                            # 'MO_MS_GT_Sex',
+                            # 'MO_MS_GT_Edu',
+                            # 'MO_MS_GT_Age_Sex',
                             ]
 
     # Subsets for regression

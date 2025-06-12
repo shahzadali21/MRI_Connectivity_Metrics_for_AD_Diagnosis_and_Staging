@@ -2,7 +2,10 @@
 # Author: Shahzad Ali
 # e-mail: shahzad.ali6@unibo.it
 # Created: 2025-1-24
-# Last modified: 2025-03-07
+# Last modified: 2025-06-12
+
+# Before using this script, run `DSC_1_preprocessing.py`.
+
 
 """
 This script handles the training, optimization, and ensemble of machine learning models.
@@ -10,14 +13,13 @@ It loads preprocessed data, performs grid search optimization, evaluates the mod
 calculates diversity using the Q metric, and performs ensemble voting with diverse models.
 """
 
-# Before using this script, run `preprocessing_v2.py`.
 
 import os
 import logging
 import argparse
 
-from utils import load_data, save_model, load_model, save_results, save_metrics_to_excel
 from DSC_models import get_models_and_params, optimize_models, evaluate_models
+from utils import load_data, save_model, load_model, save_results, save_metrics_to_excel
 
 
 import warnings
@@ -87,7 +89,7 @@ def train_and_evaluate_models(data_dir, models_dir, results_dir, classification_
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="Train and evaluate models for all classification types")
-    parser.add_argument('--output_dir', type=str, default='V6_ProjectOutput_AmyStatus', help="Main project directory for clinical AD dataset")
+    parser.add_argument('--output_dir', type=str, default='Results/DSC', help="Main project directory for clinical AD dataset")
     #parser.add_argument('--feature_combination_name', type=str, required=True, help="Name of the feature combination being processed")
     return parser.parse_args()
 
@@ -104,21 +106,20 @@ def main():
     # Loop over specified feature combination folders
     feature_combinations = [
                             #'Clinical',
-                            'Morphometric',
-                            'Microstructural',
-                            'GT_Local',
-                            'GT_Global',
-                            'GT',
-                            'Microstructural_Morphometric',
-                            'Morphometric_GT',
-                            'Microstructural_GT',
-                            'Microstructural_Morphometric_GT',
-                            #'Demographic_Microstructural_GT',
-                            # 'Demographic_Microstructural_Morphometric_GT',
-                            #'GT_Microstructural_Morphometric_Age',
-                            #'GT_Microstructural_Morphometric_Sex',
-                            #'GT_Microstructural_Morphometric_Edu',
-                            #'GT_Microstructural_Morphometric_Age_Sex',
+                            'MO',
+                            # 'MS',
+                            # 'GT_Local',
+                            # 'GT_Global',
+                            # 'GT',
+                            # 'MO_MS',
+                            # 'MO_GT',
+                            # 'MS_GT',
+                            # 'MO_MS_GT',
+                            # 'MO_MS_GT_Dg',
+                            # 'MO_MS_GT_Age',
+                            # 'MO_MS_GT_Sex',
+                            # 'MO_MS_GT_Edu',
+                            # 'MO_MS_GT_Age_Sex',
                             ]
     
     # Define classification types and comparisons

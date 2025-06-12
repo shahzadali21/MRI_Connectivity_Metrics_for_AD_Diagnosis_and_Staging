@@ -15,8 +15,8 @@ import os
 import logging
 import argparse
 
-from utils import load_data, save_model, load_model, save_results, save_metrics_to_excel  #save_regression_metrics
 from LCDP_models import get_models_and_params, optimize_models, evaluate_models
+from utils import load_data, save_model, load_model, save_results, save_metrics_to_excel  #save_regression_metrics
 
 import warnings
 warnings.filterwarnings("ignore")
@@ -73,7 +73,7 @@ def train_and_evaluate_models(data_dir, models_dir, results_dir, subset_name, me
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="Train and evaluate regression models for all subsets")
-    parser.add_argument('--output_dir', type=str, default='V8_ProjectOutput_wAmyStatus', help="Main project directory for clinical AD dataset")
+    parser.add_argument('--output_dir', type=str, default='Results/LCDP', help="Main project directory for clinical AD dataset")
     return parser.parse_args()
 
 
@@ -86,19 +86,21 @@ def main():
 
     # Loop over specified feature combination folders
     feature_combinations = [
-                            #"Clinical",
-                            #"Demographic",
-                            "GT_Global",
-                            "GT_Local", 
-                            "Microstructural",
-                            "Morphometric",
-                            "GT",
-                            "Microstructural_Morphometric", 
-                            "Morphometric_GT",
-                            "Microstructural_GT",
-                            "Microstructural_Morphometric_GT", 
-                            #"Demographic_Microstructural_GT",
-                            #"Demographic_Microstructural_Morphometric_GT",
+                            #'Clinical',
+                            'MO',
+                            # 'MS',
+                            # 'GT_Local',
+                            # 'GT_Global',
+                            # 'GT',
+                            # 'MO_MS',
+                            # 'MO_GT',
+                            # 'MS_GT',
+                            # 'MO_MS_GT',
+                            # 'MO_MS_GT_Dg',
+                            # 'MO_MS_GT_Age',
+                            # 'MO_MS_GT_Sex',
+                            # 'MO_MS_GT_Edu',
+                            # 'MO_MS_GT_Age_Sex',
                             ]
 
     # Subsets for regression

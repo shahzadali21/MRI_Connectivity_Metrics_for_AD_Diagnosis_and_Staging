@@ -1,17 +1,16 @@
 # A Systematic Study on the Integration of Advanced MRI Connectivity Metrics for Alzheimer’s Disease Diagnosis and Staging and Longitudinal Cognitive Decline Prediction
 
 ## Project Overview
-This project implements a machine learning pipeline for the Alzheimer's Disease Stage classification (DSC) and Longitudinal Cognitive Decline Prediction (LCDP) in terms of delta MMSE. The pipeline supports both binary classification (CN-ADD, CN-MCI, MCI-ADD) and three-level classification (CN-MCI-ADD) using various machine learning models. It includes preprocessing of multimodal data (demographic, Morphometric (MO), Miscrostructial (MO), and Graph Theory (GT) features), model training, optimization, Ensemble Learning, eXplainability (XAI).
+This project implements a machine learning pipeline for the Alzheimer's Disease Stage classification (DSC) and Longitudinal Cognitive Decline Prediction (LCDP) in terms of delta MMSE. The pipeline supports both binary classification (CN-ADD, CN-MCI, MCI-ADD) and multi-level classification (CN-MCI-ADD) using various machine learning models. It includes preprocessing and preparing data (demographic, Morphometric (MO), Miscrostructial (MO), and Graph Theory (GT) features), model training and optimization, ensemble Learning, eXplainability (XAI).
 
 
 
 
 ## Project Structure
-- **preprocessing.py**: Handles the preprocessing of clinical data, including feature scaling and train-test splitting.
-- **model_optimization.py**: Selects top-performing models and optimizes their hyperparameters via five-fold CV using GridSearchCV.
-- **model_training.py**: Trains various machine learning models and evaluates their performance on the test set.
-- **voting.py**: Implements ensemble classifier using the top-performing models from both the optimized models.
-- **final_comparison.py**: Compares the performance of all models (initial, optimized, and voting classifiers) and generates visualizations.
+- **preprocessing.py**: handles the preprocessing of clinical data, including feature scaling and train-test splitting w.r.t. each task.
+- **model_optimization.py**: performs model's hyperparameter tunning via five-fold CV using GridSearchCV and selects top-performing optmized mdoels. Consequently, train models and evaluates their performance on the test set.
+- **ensemble.py**: Implements ensemble classifier from the best performing base models.
+- **explainabiility.py**: Compares the performance of all models (initial, optimized, and voting classifiers) and generates visualizations including, confusion matrices, feature importance charts, XAI based plots (using SHAP and LIME).
 - **main.py**: Orchestrates the entire pipeline, running all steps in sequence.
 
 ## Directory Structure

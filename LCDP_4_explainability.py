@@ -17,11 +17,14 @@ import os
 import argparse
 import logging
 import pandas as pd
+
 from utils import load_model, load_data
+
+from LCDP_models import select_top_models
+
 import LCDP_visualization as viz
 import LCDP_XAI_reression as xai
 
-from LCDP_models import select_top_models
 
 import warnings
 warnings.filterwarnings('ignore')
@@ -84,9 +87,11 @@ def generate_comparison_plots(data_dir, models_dir, results_dir, plots_dir, outp
     viz.plot_feature_importance(model=rf_model, feature_names=feature_names, top_n=5, results_dir=results_dir, output_dir=plots_dir)
  
 
+
+
 def generate_shap_explainability(data_dir, models_dir, plots_dir, results_dir):
     # Load the trained model with the best MAE
-    best_model_name = 'SVR' # 'SVR' | 'AdaB'
+    best_model_name = 'AdaB' # 'SVR' | 'AdaB'
     logging.info(f"Loading the trained regression model '{best_model_name}'")
     best_model = load_model(model_name=best_model_name, input_dir=models_dir)
 
@@ -115,7 +120,7 @@ def generate_shap_explainability(data_dir, models_dir, plots_dir, results_dir):
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="Generate visualizations and explainability for models")
-    parser.add_argument('--output_dir', type=str, default='V7_ProjectOutput_wAmyStatus_Ens_belowMean', help="Main project directory for clinical AD dataset")  #V3_ProjectOutput_MMSE_Ens_Top5
+    parser.add_argument('--output_dir', type=str, default='Results/LCDP', help="Main project directory for clinical AD dataset")  #V3_ProjectOutput_MMSE_Ens_Top5
     return parser.parse_args()
 
 def main():
@@ -125,19 +130,21 @@ def main():
 
     # Loop over all feature combination folders
     feature_combinations = [
-                            #"Clinical",
-                            #"Demographic",
-                            # "GT_Global",
-                            # "GT_Local", 
-                            # "Microstructural",
-                            "Morphometric",
-                            # "GT",
-                            # "Microstructural_Morphometric", 
-                            # "Morphometric_GT",
-                            # "Microstructural_GT",
-                            # "Microstructural_Morphometric_GT", 
-                            #"Demographic_Microstructural_GT",
-                            #"Demographic_Microstructural_Morphometric_GT",
+                            #'Clinical',
+                            'MO',
+                            # 'MS',
+                            # 'GT_Local',
+                            # 'GT_Global',
+                            # 'GT',
+                            # 'MO_MS',
+                            # 'MO_GT',
+                            # 'MS_GT',
+                            # 'MO_MS_GT',
+                            # 'MO_MS_GT_Dg',
+                            # 'MO_MS_GT_Age',
+                            # 'MO_MS_GT_Sex',
+                            # 'MO_MS_GT_Edu',
+                            # 'MO_MS_GT_Age_Sex',
                             ]
 
     # Subsets for regression

@@ -3,7 +3,7 @@
 # Author: Shahzad Ali
 # e-mail: shahzad.ali6@unibo.it
 # Created: 2025-1-24
-# Last modified: 2025-03-07
+# Last modified: 2025-06-12
 
 
 import numpy as np
@@ -34,23 +34,19 @@ def get_models_and_params(seed):
     """Returns a dictionary of various machine learning models initialized with a given random seed."""
     models_with_params = {
         'LR': (LogisticRegression(random_state=seed), {'C': [0.001, 0.01, 0.1, 1, 10, 100], 'penalty': ['l1', 'l2', 'elasticnet', 'none'], 'solver': ['liblinear', 'lbfgs', 'saga', 'newton-cg'], 'max_iter': [50, 100, 500, 1000, 5000]}),
-        'LR-SGD': (SGDClassifier(loss='log_loss', random_state=seed), {'penalty': ['l2', 'l1', 'elasticnet'], 'alpha': [0.0001, 0.001, 0.01, 0.1], 'learning_rate': ['constant', 'optimal', 'invscaling', 'adaptive'], 'eta0': [0.001, 0.01, 0.1, 1], 'max_iter': [100, 200, 300, 500, 1000, 1500], 'tol': [1e-2, 1e-3, 1e-4, 1e-5]}),
-        'LDA': (LinearDiscriminantAnalysis(), {'solver': ['lsqr', 'eigen'], 'shrinkage': ['auto', None, 'log']}),
+        # 'LR-SGD': (SGDClassifier(loss='log_loss', random_state=seed), {'penalty': ['l2', 'l1', 'elasticnet'], 'alpha': [0.0001, 0.001, 0.01, 0.1], 'learning_rate': ['constant', 'optimal', 'invscaling', 'adaptive'], 'eta0': [0.001, 0.01, 0.1, 1], 'max_iter': [100, 200, 300, 500, 1000, 1500], 'tol': [1e-2, 1e-3, 1e-4, 1e-5]}),
+        # 'LDA': (LinearDiscriminantAnalysis(), {'solver': ['lsqr', 'eigen'], 'shrinkage': ['auto', None, 'log']}),
         'DT': (DecisionTreeClassifier(random_state=seed), {'criterion': ['gini', 'entropy'], 'max_depth': [3, 5, 10, 15, 20, None], 'min_samples_split': [2, 3, 5, 7, 10], 'max_features': [0.3, 0.5, 0.7, 1.0]}),
         'RF': (RandomForestClassifier(random_state=seed),{'n_estimators': [5, 10, 30, 50, 70], 'max_depth': [3, 5, 10, 15, 20, None],'min_samples_split': [2, 5, 10, 15], 'min_samples_leaf': [1, 2, 4, 6], 'bootstrap': [True, False]}),
-        'SVM': (SVC(random_state=seed, probability=True),{'C': [0.01, 0.1, 1, 10, 100, 500, 1000], 'kernel': ['linear', 'poly', 'rbf', 'sigmoid'], 'gamma': ['scale', 'auto']}),   # 'max_iter': [1000, 5000, 10000]
-        'KNN': (KNeighborsClassifier(),{'n_neighbors': [1, 3, 5, 7, 9], 'weights': ['uniform', 'distance'], 'p': [1, 2], 'metric': ['euclidean', 'manhattan', 'minkowski']}),
-        'NB': (GaussianNB(), {'var_smoothing': np.logspace(0, -9, num=100)}), 
-        'ETC': (ExtraTreesClassifier(random_state=seed),{'n_estimators': [5, 10, 30, 50, 70], 'criterion': ['gini', 'entropy'], 'max_depth': [10, 20, 30, None],'min_samples_split': [2, 5, 10], 'min_samples_leaf': [1, 2, 4], 'max_features': [0.3, 0.5, 0.7, 1.0],'bootstrap': [True, False], 'oob_score': [True]}),
-        'AdB': (AdaBoostClassifier(random_state=seed),{'n_estimators': [5, 10, 30, 50, 70], 'learning_rate': [0.01, 0.1, 0.5, 1.0],'algorithm': ['SAMME']}),
-        'GB': (GradientBoostingClassifier(random_state=seed),{'n_estimators': [5, 10, 30, 50, 70], 'learning_rate': [0.01, 0.03, 0.1, 0.3, 0.5, 1.0],'max_depth': [3, 5, 7, 10], 'min_samples_split': [2, 5, 10], 'min_samples_leaf': [1, 2, 4], 'subsample': [0.4, 0.5, 0.6, 0.8, 1.0], 'max_features': [0.3, 0.5, 0.7, 1.0]}),
-        'XGBC': (XGBClassifier(random_state=seed),{'n_estimators': [5, 10, 30, 50, 70], 'learning_rate': [0.01, 0.03, 0.1, 0.3, 0.5], 'max_depth': [3, 5, 7, 10],'min_child_weight': [1, 3, 5], 'subsample': [0.8, 1.0], 'colsample_bytree': [0.8, 1.0],'gamma': [0, 0.1, 0.2], 'reg_alpha': [0, 0.1, 0.5], 'reg_lambda': [1, 1.5, 2]}),
+        # 'SVM': (SVC(random_state=seed, probability=True),{'C': [0.01, 0.1, 1, 10, 100, 500, 1000], 'kernel': ['linear', 'poly', 'rbf', 'sigmoid'], 'gamma': ['scale', 'auto']}),   # 'max_iter': [1000, 5000, 10000]
+        # 'KNN': (KNeighborsClassifier(),{'n_neighbors': [1, 3, 5, 7, 9], 'weights': ['uniform', 'distance'], 'p': [1, 2], 'metric': ['euclidean', 'manhattan', 'minkowski']}),
+        # 'NB': (GaussianNB(), {'var_smoothing': np.logspace(0, -9, num=100)}), 
+        # 'ETC': (ExtraTreesClassifier(random_state=seed),{'n_estimators': [5, 10, 30, 50, 70], 'criterion': ['gini', 'entropy'], 'max_depth': [10, 20, 30, None],'min_samples_split': [2, 5, 10], 'min_samples_leaf': [1, 2, 4], 'max_features': [0.3, 0.5, 0.7, 1.0],'bootstrap': [True, False], 'oob_score': [True]}),
+        # 'AdB': (AdaBoostClassifier(random_state=seed),{'n_estimators': [5, 10, 30, 50, 70], 'learning_rate': [0.01, 0.1, 0.5, 1.0],'algorithm': ['SAMME']}),
+        # 'GB': (GradientBoostingClassifier(random_state=seed),{'n_estimators': [5, 10, 30, 50, 70], 'learning_rate': [0.01, 0.03, 0.1, 0.3, 0.5, 1.0],'max_depth': [3, 5, 7, 10], 'min_samples_split': [2, 5, 10], 'min_samples_leaf': [1, 2, 4], 'subsample': [0.4, 0.5, 0.6, 0.8, 1.0], 'max_features': [0.3, 0.5, 0.7, 1.0]}),
+        # 'XGBC': (XGBClassifier(random_state=seed),{'n_estimators': [5, 10, 30, 50, 70], 'learning_rate': [0.01, 0.03, 0.1, 0.3, 0.5], 'max_depth': [3, 5, 7, 10],'min_child_weight': [1, 3, 5], 'subsample': [0.8, 1.0], 'colsample_bytree': [0.8, 1.0],'gamma': [0, 0.1, 0.2], 'reg_alpha': [0, 0.1, 0.5], 'reg_lambda': [1, 1.5, 2]}),
         # 'MLP': (MLPClassifier(random_state=seed),{'learning_rate_init': [0.001, 0.0005, 0.0001], 'alpha': [0.0001, 0.001, 0.01, 0.1, 1.0, 10], 'learning_rate': ['constant', 'invscaling', 'adaptive'],'activation': ['identity', 'logistic', 'tanh', 'relu'],'hidden_layer_sizes': [(30,), (50,), (100,), (50, 25), (100, 50), (200, 100)], 'solver': ['lbfgs', 'sgd', 'adam'], 'max_iter': [50, 100, 150, 200, 250, 300, 400, 500], 'early_stopping': [True], 'batch_size': [32, 64, 128], 'momentum': [0.5, 0.9, 0.99]}),
-        # 'Bag_LR': (BaggingClassifier(estimator=LogisticRegression(random_state=seed), random_state=seed), {'n_estimators': [5, 10, 30, 50, 70], 'max_samples': [0.3, 0.5, 0.7, 1.0], 'max_features': [0.3, 0.5, 0.7, 1.0], 'bootstrap': [True, False], 'bootstrap_features': [True, False], 'estimator__C': [0.001, 0.01, 0.1, 1, 10, 100], 'estimator__penalty': ['l1', 'l2', 'elasticnet', 'none'], 'estimator__solver': ['liblinear', 'lbfgs', 'saga', 'newton-cg'], 'estimator__max_iter': [100, 500, 1000], 'estimator__tol': [1e-4, 1e-5, 1e-6]}),
-        # 'Bag_LDA': (BaggingClassifier(estimator=LinearDiscriminantAnalysis(), random_state=seed), {'n_estimators': [5, 10, 30, 50, 70], 'max_samples': [0.3, 0.5, 0.7, 1.0], 'max_features': [0.3, 0.5, 0.7, 1.0],'bootstrap': [True, False], 'bootstrap_features': [True, False], 'estimator__solver': ['lsqr', 'eigen'], 'estimator__shrinkage': ['auto', None, 'log']}),
-        # 'Bag_KNN': (BaggingClassifier(estimator=KNeighborsClassifier(), random_state=seed), {'n_estimators': [5, 10, 30, 50, 70], 'max_samples': [0.3, 0.5, 0.7, 1.0], 'max_features': [0.3, 0.5, 0.7, 1.0], 'bootstrap': [True, False], 'bootstrap_features': [True, False], 'estimator__n_neighbors': [1, 3, 5, 7, 9], 'estimator__weights': ['uniform', 'distance'], 'estimator__p': [1, 2]}),     
-        # 'Bag_DT': (BaggingClassifier(estimator=DecisionTreeClassifier(random_state=seed), random_state=seed), {'n_estimators': [5, 10, 30, 50, 70], 'max_samples': [0.3, 0.5, 0.7, 1.0], 'max_features': [0.3, 0.5, 0.7, 1.0], 'bootstrap': [True, False], 'bootstrap_features': [True, False],'estimator__criterion': ['gini', 'entropy'], 'estimator__max_depth': [3, 5, 7, 10, 15, None], 'estimator__min_samples_split': [2, 5, 7]}),     
-    }
+        }
     return models_with_params
 
 
@@ -146,7 +142,32 @@ def evaluate_models(models, X_test, y_test):
     metrics = pd.DataFrame(eval_metrics, columns=['Accuracy', 'BACC', 'MCC', 'Precision', 'Recall', 'Specificity', 'F1-Score', 'AUC', 'NPV', 'Type I Error', 'Type II Error'], index=model_names)
     return metrics, predictions
 
+def select_top_models(metrics, models, top_n=3):
+    """Select the top N models based on accuracy or another metric."""
+    # Sort by the chosen metric (e.g., "Accuracy")
+    top_models_df = metrics.sort_values(by='Accuracy', ascending=False).head(top_n)
 
+    # Extract the model names from the "Model" column in the sorted DataFrame
+    top_model_names = top_models_df['Model'].tolist()
+
+    # Retrieve the actual model objects from the models dictionary
+    return [(name, models[name]) for name in top_model_names if name in models]
+
+def select_top_model_1(metrics, models, top_n=3):
+    """
+    Select the top N models based on their evaluation metrics.
+    Parameters:
+        metrics : DataFrame : The evaluation metrics for the models.
+        models : dict : Dictionary of trained models.
+        top_n : int : The number of top models to select.
+    Returns:
+        top_models : list : List of the top N models with their names.
+    """
+    top_model_names = metrics.nlargest(top_n, 'Accuracy').index.tolist()
+    return [(name, models[name]) for name in top_model_names]
+
+
+################################
 def calculate_q_metric(predictions_1, predictions_2, y_true):
     """Calculate the Q metric to assess diversity between two classifiers."""
     N11 = np.sum((predictions_1 == y_true) & (predictions_2 == y_true))
@@ -161,28 +182,6 @@ def calculate_q_metric(predictions_1, predictions_2, y_true):
         return np.inf  # Avoid division by zero
     
     return numerator / denominator
-
-def select_diverse_models_v0(metrics, predictions, y_true, top_n=5):
-    """
-    Selects pairs of models with low Q values to form a diverse ensemble.
-    Returns a list of model names based on the Q metric.
-    """
-    model_names = metrics.index.tolist()
-    pairs = []
-    for i in range(len(model_names)):
-        for j in range(i + 1, len(model_names)):
-            model1, model2 = model_names[i], model_names[j]
-            q_value = calculate_q_metric(predictions[model1], predictions[model2], y_true)
-            pairs.append((q_value, model1, model2))
-    
-    # Sort pairs by Q value (ascending) and select the most diverse models
-    pairs = sorted(pairs, key=lambda x: x[0])
-    selected_models = set()
-    for _, name1, name2 in pairs[:top_n]:  # Select top N diverse pairs
-        selected_models.add(name1)
-        selected_models.add(name2)
-    
-    return list(selected_models)
 
 
 def select_diverse_models(metrics, predictions, y_true, top_n=5):
@@ -210,28 +209,3 @@ def select_diverse_models(metrics, predictions, y_true, top_n=5):
     
     return list(selected_models)
 
-
-
-def select_top_models(metrics, models, top_n=3):
-    """
-    Select the top N models based on their evaluation metrics.
-    Parameters:
-        metrics : DataFrame : The evaluation metrics for the models.
-        models : dict : Dictionary of trained models.
-        top_n : int : The number of top models to select.
-    Returns:
-        top_models : list : List of the top N models with their names.
-    """
-    top_model_names = metrics.nlargest(top_n, 'Accuracy').index.tolist()
-    return [(name, models[name]) for name in top_model_names]
-
-def select_top_models(metrics, models, top_n=3):
-    """Select the top N models based on accuracy or another metric."""
-    # Sort by the chosen metric (e.g., "Accuracy")
-    top_models_df = metrics.sort_values(by='Accuracy', ascending=False).head(top_n)
-
-    # Extract the model names from the "Model" column in the sorted DataFrame
-    top_model_names = top_models_df['Model'].tolist()
-
-    # Retrieve the actual model objects from the models dictionary
-    return [(name, models[name]) for name in top_model_names if name in models]

@@ -4,23 +4,26 @@
 # Created: 2025-1-24
 # Last modified: 2025-03-07
 
+
+# Before using this script, run `DSC_1_preprocessing.py`, `DSC_2_model_optimizing.py`, and DSC_2_ensemble.py.
+
+
 """
 This module generates various plots for model comparison as well as explainability using SHAP and LIME.
 It loads trained models and test data, generates SHAP and LIME explanations,
 and saves the resulting visualizations and explanations to the specified output directory.
 """
 
-# Before using this script, run `preprocessing_v2.py` and `model_optimizing_v2.py` and `Voting_2.py`.
-
-
 import os
 import argparse
 import logging
 import pandas as pd
 from utils import load_model, load_data
+
+from DSC_models import select_top_models
+
 import DSC_visualization as viz
 import DSC_XAI as xai
-from DSC_models import select_top_models
 
 import warnings
 warnings.filterwarnings('ignore')
@@ -117,7 +120,7 @@ def generate_comparison_plots(data_dir, models_dir, results_dir, plots_dir, outp
 
 def generate_shap_explainability(data_dir, models_dir, results_dir, plots_dir, class_mapping):
     # Load the trained Decision Tree model
-    model_name = 'LR-SGD' #'DT', 'RF', 'LR', 'LR-SGD', 'SVM', 'LDA', 'KNN', 'NB', 'AdB' , 'GB', 'XGBC',  |'LR-SGD'
+    model_name = 'LR' #'DT', 'RF', 'LR', 'LR-SGD', 'SVM', 'LDA', 'KNN', 'NB', 'AdB' , 'GB', 'XGBC',  |'LR-SGD'
     logging.info(f"Loading the trained Decision Tree '{model_name}' model")
     model = load_model(model_name=model_name, input_dir=models_dir)
 
@@ -159,7 +162,7 @@ def generate_shap_explainability(data_dir, models_dir, results_dir, plots_dir, c
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="Generate visualizations and explainability for models")
-    parser.add_argument('--output_dir', type=str, default='V6_Top5_ProjectOutput_AmyStatus_Ens_aboveMean_Ex2', help="Main project directory for clinical AD dataset")  #V6_ProjectOutput_AmyStatus_Ens_Top2 | V6_ProjectOutput_AmyStatus_Ens_aboveMean
+    parser.add_argument('--output_dir', type=str, default='Results/DSC', help="Main project directory for clinical AD dataset")  #V6_ProjectOutput_AmyStatus_Ens_Top2 | V6_ProjectOutput_AmyStatus_Ens_aboveMean
     return parser.parse_args()
 
 def main():
@@ -171,30 +174,26 @@ def main():
     # Loop over all feature combination folders
     feature_combinations = [
                             #'Clinical',
-
-                            #'Morphometric',
-                            # 'Microstructural',
-                            #'GT_Local',
-                            #'GT_Global',
-                            #'GT',
-                            #'Microstructural_Morphometric',
-                            #'Morphometric_GT',
-                            'Microstructural_GT',
-                            #'Microstructural_Morphometric_GT',
-
-                            #'Demographic_Microstructural_GT',
-                            # 'Demographic_Microstructural_Morphometric_GT',
-                            #'GT_Microstructural_Morphometric_Age',
-                            #'GT_Microstructural_Morphometric_Sex',
-                            #'GT_Microstructural_Morphometric_Edu',
-                            #'GT_Microstructural_Morphometric_Age_Sex',
+                            'MO',
+                            # 'MS',
+                            # 'GT_Local',
+                            # 'GT_Global',
+                            # 'GT',
+                            # 'MO_MS',
+                            # 'MO_GT',
+                            # 'MS_GT',
+                            # 'MO_MS_GT',
+                            # 'MO_MS_GT_Dg',
+                            # 'MO_MS_GT_Age',
+                            # 'MO_MS_GT_Sex',
+                            # 'MO_MS_GT_Edu',
+                            # 'MO_MS_GT_Age_Sex',
                             ]
 
     # Define classification types and comparisons
     CLASSIFICATION_COMPARISONS = {
-        #'binary': ['CN_vs_AD', 'CN_vs_MCI', 'MCI_vs_AD'],
-        'binary': ['CN_vs_MCI',],
-        #'three_level': ['CN_MCI_AD']
+        'binary': ['CN_vs_AD', 'CN_vs_MCI', 'MCI_vs_AD'],
+        'three_level': ['CN_MCI_AD']
     }    
     for feature_combination_name in feature_combinations:
         # Set the metrics file path in the main directory

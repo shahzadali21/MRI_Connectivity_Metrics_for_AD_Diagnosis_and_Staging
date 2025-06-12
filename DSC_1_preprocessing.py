@@ -2,7 +2,7 @@
 # Author: Shahzad Ali
 # e-mail: shahzad.ali6@unibo.it
 # Created: 2025-1-24
-# Last modified: 2025-03-07
+# Last modified: 2025-06-12
 # Version: 1.2
 
 """
@@ -14,23 +14,10 @@ and saves the final processed data to the specified output directory structure.
 
 # Before using this script, first prepare the dataset using `1_AD_EDA.ipynb` available in the notebook.
 
-
-"""
-To run in colaboratory, run the following commands in a cell:
-    !mkdir my_project
-    !mv preprocessing_v2.py model_optimizing.py models.py utils.py utils.py my_project/. # update path to read data (# '/content/my_project')
-
-    import sys
-    sys.path.append('/content/my_project')  # Replace with your folder path if different
-    %run /content/my_project/preprocessing_v2.py
-"""
-
 import os
 import logging
 import argparse
 import pandas as pd
-#from itertools import combinations
-from imblearn.over_sampling import SMOTE
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder, StandardScaler, MinMaxScaler
 from utils import save_data
@@ -46,18 +33,9 @@ microstructural_features = ['BPV', 'mean_MD', 'mean_FA', 'TBSS_WMmaskFA', 'LH_me
 morphometric_features = ['Left-Thalamus', 'Left-Caudate', 'Left-Putamen', 'Left-Pallidum', 'Left-Hippocampus', 'Left-Amygdala', 'Left-Accumbens-area', 'sum_Hippocampus', 'Right-Thalamus', 'Right-Caudate', 'Right-Putamen', 'Right-Pallidum', 'Right-Hippocampus', 'Right-Amygdala', 'Right-Accumbens-area', 'CSF', 'mean_inferiortemporal_thickness', 'mean_middletemporal_thickness', 'mean_temporalpole_thickness', 'mean_superiorfrontal_thickness', 'mean_superiorparietal_thickness', 'mean_supramarginal_thickness', 'mean_precuneus_thickness', 'mean_superiortemporal_thickness', 'mean_inferiorparietal_thickness', 'mean_rostralmiddlefrontal_thickness']
 csf_feature = ['A+?_le']
 
-# Function to generate all combinations of feature sets
-def generate_feature_combinations(feature_sets):
-    all_combinations = []
-    for r in range(1, len(feature_sets) + 1):
-        combinations_r = combinations(feature_sets, r)
-        all_combinations.extend(combinations_r)
-    return all_combinations
-
 
 # General Preprocessing to prepare reusable dataset
 def general_preprocessing(df, output_dir):
-    # Ensure output directory exists
     os.makedirs(output_dir, exist_ok=True)
 
     logging.info(f"\n\n######################## RAW DATA EDA #####################")
@@ -114,25 +92,16 @@ def general_preprocessing(df, output_dir):
     df.insert(df.columns.get_loc('DX') + 1, 'DX_le', df['DX'].map(rg_dx_map))
     df.insert(df.columns.get_loc('A+?') + 1, 'A+?_le', df['A+?'].map(csf_map))
 
-    """
-    # One-Hot Encoding for 'Sex' and 'PTMARRY': Since these are nominal (non-ordinal) variables with no inherent order.
-    # Generate dummy variables without dropping the original columns and insert them next to the original columns
-    for col in ['Sex', 'PTMARRY']:
-        dummies = pd.get_dummies(dataframe[col], drop_first=True)  # Keep all original levels
-        dummies.columns = [f"{col}_{val}" for val in dummies.columns]  # Rename columns
-        
-        for dummy_col in dummies.columns:
-            # Insert each dummy column right after the original column
-            dataframe.insert(dataframe.columns.get_loc(col) + 2, dummy_col, dummies[dummy_col])
-    """
     logging.info(f"\nShape of df after Label Encoding: {df.shape}, \nColumns in df after Label Encoding: {list(df.columns)}")
 
     logging.info(f"\n\n######################## Basic Preprocessed DATA EDA #####################")
     logging.info(f"Shape of dataframe: {df.shape}, \nValue counts of DX: {df['DX'].value_counts()}, \nValue counts of Research Group: {df['RG'].value_counts()}")
     logging.info(f"SETUP Information: \nDataframe: {df.head()}")
+    
     # Save the preprocessed dataframe
     df.to_csv(os.path.join(output_dir, '1_ADNI_generalPreprocessed.csv'), index=False)
     logging.info(f"Saved preprocessed data to {output_dir}")
+
 
 # Feature-Specific Processing for Each Combination
 def feature_specific_processing(preprocessed_file, target_column, feature_combination_name, selected_features, classification_type, comparison, output_dir, classification_dir, scaler_type, test_size=0.2, seed=42, use_smote=False):
@@ -229,7 +198,7 @@ def parse_arguments():
     
     parser.add_argument('--target_column', type=str, default='DX_le', choices=['DX_le', 'RG_le'], help="Specify which column to use as the target")
     
-    parser.add_argument('--output_dir', type=str, default='V6_ProjectOutput_AmyStatus', help="Main project directory for output data")
+    parser.add_argument('--output_dir', type=str, default='Results/DSC', help="Main project directory for output data")
     #choices=["none", "mutual_info", "anova", "rfe_elastic_net", "random_forest", "pca", "ga"]
     parser.add_argument('--scaler', type=str, default='minmax', choices=['standard', 'minmax'], help="Type of scaler to use")
     parser.add_argument('--test_size', type=float, default=0.20, help="Proportion of the dataset to include in the test split")
@@ -266,24 +235,23 @@ def main():
     preprocessed_file = os.path.join(args.output_dir, '1_ADNI_generalPreprocessed.csv')
 
     feature_combinations = {
-        # 'Demographic': demographic_features + csf_feature,
+        # 'Dg': demographic_features + csf_feature,
         # 'Clinical': clinical_features + csf_feature,
-        'Morphometric': csf_feature + morphometric_features,
-        # 'Microstructural': csf_feature + microstructural_features,
+        'MO': csf_feature + morphometric_features,
+        # 'MS': csf_feature + microstructural_features,
         # 'GT_Local': csf_feature + GT_local_metrics,
         # 'GT_Global': csf_feature + GT_global_metrics,
         # 'GT': csf_feature + GT_local_metrics + GT_global_metrics,
-        # 'Microstructural_Morphometric': csf_feature + microstructural_features + morphometric_features,
-        # 'Morphometric_GT': csf_feature + morphometric_features + GT_global_metrics + GT_local_metrics,
-        # 'Microstructural_GT': csf_feature + microstructural_features + GT_global_metrics + GT_local_metrics,
-        # 'Microstructural_Morphometric_GT': csf_feature + microstructural_features + morphometric_features + GT_global_metrics + GT_local_metrics,
-        # 'Demographic_Microstructural_GT': csf_feature + demographic_features + microstructural_features + GT_global_metrics + GT_local_metrics,
-        # 'Demographic_Microstructural_Morphometric_GT': csf_feature + demographic_features + microstructural_features + morphometric_features + GT_global_metrics + GT_local_metrics,
-        #'GT_Microstructural_Morphometric_Age': csf_feature + demographic_features['Age'] + microstructural_features + morphometric_features + GT_global_metrics + GT_local_metrics,
-        #'GT_Microstructural_Morphometric_Sex': csf_feature + demographic_features['Sex_le'] + microstructural_features + morphometric_features + GT_global_metrics + GT_local_metrics,
-        #'GT_Microstructural_Morphometric_Marry': csf_feature + demographic_features['PTMARRY_le'] + microstructural_features + morphometric_features + GT_global_metrics + GT_local_metrics,
-        #'GT_Microstructural_Morphometric_Edu': csf_feature + demographic_features['PTEDUCAT'] + microstructural_features + morphometric_features + GT_global_metrics + GT_local_metrics,
-        #'GT_Microstructural_Morphometric_Age_Sex': csf_feature + demographic_features['Age', 'Sex_le'] + microstructural_features + morphometric_features + GT_global_metrics + GT_local_metrics,
+        # 'MO_MS': csf_feature + microstructural_features + morphometric_features,
+        # 'MO_GT': csf_feature + morphometric_features + GT_global_metrics + GT_local_metrics,
+        # 'MS_GT': csf_feature + microstructural_features + GT_global_metrics + GT_local_metrics,
+        # 'MO_MS_GT': csf_feature + microstructural_features + morphometric_features + GT_global_metrics + GT_local_metrics,
+        # 'MO_MS_GT_Dg': csf_feature + demographic_features + microstructural_features + morphometric_features + GT_global_metrics + GT_local_metrics,
+        # 'MO_MS_GT_Age': csf_feature + demographic_features['Age'] + microstructural_features + morphometric_features + GT_global_metrics + GT_local_metrics,
+        # 'MO_MS_GT_Sex': csf_feature + demographic_features['Sex_le'] + microstructural_features + morphometric_features + GT_global_metrics + GT_local_metrics,
+        # 'MO_MS_GT_Marry': csf_feature + demographic_features['PTMARRY_le'] + microstructural_features + morphometric_features + GT_global_metrics + GT_local_metrics,
+        # 'MO_MS_GT_Edu': csf_feature + demographic_features['PTEDUCAT'] + microstructural_features + morphometric_features + GT_global_metrics + GT_local_metrics,
+        # 'MO_MS_GT_Age_Sex': csf_feature + demographic_features['Age', 'Sex_le'] + microstructural_features + morphometric_features + GT_global_metrics + GT_local_metrics,
         }
     
     

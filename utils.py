@@ -2,7 +2,7 @@
 # Author: Shahzad Ali
 # e-mail: shahzad.ali6@unibo.it
 # Created: 2025-1-24
-# Last modified: 2025-03-07
+# Last modified: 2025-06-12
 
 """
 This script contains utility functions used across the project.
@@ -68,28 +68,6 @@ def save_results(y_test, predictions_dict, output_file):
     results_df.to_csv(output_file, index=False)
     logging.info(f"Evaluation results/predictions saved to {output_file}")
 
-
-    
-def save_metrics(metrics, output_file):
-    """ Save the evaluation metrics to a CSV file with a header for the model names. """
-    # Ensure the index (model names) has a name
-    metrics.index.name = 'Model'
-    
-    # Create the output directory if it doesn't exist
-    os.makedirs(os.path.dirname(output_file), exist_ok=True)
-    
-    # Save the metrics DataFrame to a CSV file
-    metrics.to_csv(output_file, index=True)
-    
-    print(f"Metrics saved to {output_file}")
-
-def save_metrics_to_excel_v0(metrics_dict, output_file):
-    """ Save all evaluation metrics to a single Excel file with multiple sheets. """
-    with pd.ExcelWriter(output_file, engine='openpyxl') as writer:
-        for classification_type, metrics in metrics_dict.items():
-            metrics.to_excel(writer, sheet_name=classification_type, index_label='Model')
-            logging.info(f"Metrics saved to {output_file} in sheet: {classification_type}")
-
 def save_metrics_to_excel(metrics_dict, output_file):
     """ Save all evaluation metrics to an Excel file with multiple sheets, updating existing sheets if necessary. """
     try:
@@ -109,6 +87,10 @@ def save_metrics_to_excel(metrics_dict, output_file):
         logging.error(f"Error saving metrics to Excel: {e}")
 
 
+
+
+
+###########################################
 def save_regression_metrics(metrics_dict, output_file):
     """
     Save all evaluation metrics to an Excel file with multiple sheets, 
